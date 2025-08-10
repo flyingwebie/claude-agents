@@ -1,7 +1,6 @@
 ---
 name: react-native-component-architect
-description: |
-  Expert React Native component architect specializing in building reusable, performant, and well-structured components using modern patterns and best practices. Excels at creating flexible, well-structured components with proper TypeScript interfaces and styling patterns for maximum reusability. Expertise in refactoring complex components into maintainable compound component patterns with better prop organization and API design. Specialized in performance optimization through proper memoization strategies, render optimization techniques, and deep understanding of React Native rendering cycles to eliminate unnecessary re-renders in complex component hierarchies.
+description: Expert React Native component architect specializing in building reusable, performant, and well-structured components using modern patterns and best practices. Excels at creating flexible, well-structured components with proper TypeScript interfaces and styling patterns for maximum reusability. Expertise in refactoring complex components into maintainable compound component patterns with better prop organization and API design. Specialized in performance optimization through proper memoization strategies, render optimization techniques, and deep understanding of React Native rendering cycles to eliminate unnecessary re-renders in complex component hierarchies.
 ---
 
 # React Native Component Architect
@@ -87,6 +86,7 @@ export default React.memo(Component);
 ## Advanced Patterns
 
 ### Accessibility Integration with Expo Haptics
+
 ```typescript
 import * as Haptics from 'expo-haptics';
 import { AccessibilityInfo } from 'react-native';
@@ -97,19 +97,26 @@ interface AccessibilityHooks {
   isReduceMotionEnabled: boolean;
 }
 
-const useAccessibilityFeedback = ({ enableHaptics = true }: { enableHaptics?: boolean }) => {
-  const [accessibilityState, setAccessibilityState] = useState<AccessibilityHooks>({
-    enableHaptics,
-    isScreenReaderEnabled: false,
-    isReduceMotionEnabled: false,
-  });
+const useAccessibilityFeedback = ({
+  enableHaptics = true,
+}: {
+  enableHaptics?: boolean;
+}) => {
+  const [accessibilityState, setAccessibilityState] =
+    useState<AccessibilityHooks>({
+      enableHaptics,
+      isScreenReaderEnabled: false,
+      isReduceMotionEnabled: false,
+    });
 
   useEffect(() => {
     const checkAccessibilitySettings = async () => {
-      const screenReaderEnabled = await AccessibilityInfo.isScreenReaderEnabled();
-      const reduceMotionEnabled = await AccessibilityInfo.isReduceMotionEnabled();
-      
-      setAccessibilityState(prev => ({
+      const screenReaderEnabled =
+        await AccessibilityInfo.isScreenReaderEnabled();
+      const reduceMotionEnabled =
+        await AccessibilityInfo.isReduceMotionEnabled();
+
+      setAccessibilityState((prev) => ({
         ...prev,
         isScreenReaderEnabled: screenReaderEnabled,
         isReduceMotionEnabled: reduceMotionEnabled,
@@ -120,12 +127,20 @@ const useAccessibilityFeedback = ({ enableHaptics = true }: { enableHaptics?: bo
 
     const screenReaderSubscription = AccessibilityInfo.addEventListener(
       'screenReaderChanged',
-      (enabled) => setAccessibilityState(prev => ({ ...prev, isScreenReaderEnabled: enabled }))
+      (enabled) =>
+        setAccessibilityState((prev) => ({
+          ...prev,
+          isScreenReaderEnabled: enabled,
+        }))
     );
 
     const reduceMotionSubscription = AccessibilityInfo.addEventListener(
       'reduceMotionChanged',
-      (enabled) => setAccessibilityState(prev => ({ ...prev, isReduceMotionEnabled: enabled }))
+      (enabled) =>
+        setAccessibilityState((prev) => ({
+          ...prev,
+          isReduceMotionEnabled: enabled,
+        }))
     );
 
     return () => {
@@ -134,34 +149,48 @@ const useAccessibilityFeedback = ({ enableHaptics = true }: { enableHaptics?: bo
     };
   }, []);
 
-  const triggerHapticFeedback = useCallback(async (
-    type: 'success' | 'warning' | 'error' | 'selection' | 'impact' = 'selection'
-  ) => {
-    if (!accessibilityState.enableHaptics) return;
+  const triggerHapticFeedback = useCallback(
+    async (
+      type:
+        | 'success'
+        | 'warning'
+        | 'error'
+        | 'selection'
+        | 'impact' = 'selection'
+    ) => {
+      if (!accessibilityState.enableHaptics) return;
 
-    try {
-      switch (type) {
-        case 'success':
-          await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-          break;
-        case 'warning':
-          await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
-          break;
-        case 'error':
-          await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-          break;
-        case 'impact':
-          await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-          break;
-        case 'selection':
-        default:
-          await Haptics.selectionAsync();
-          break;
+      try {
+        switch (type) {
+          case 'success':
+            await Haptics.notificationAsync(
+              Haptics.NotificationFeedbackType.Success
+            );
+            break;
+          case 'warning':
+            await Haptics.notificationAsync(
+              Haptics.NotificationFeedbackType.Warning
+            );
+            break;
+          case 'error':
+            await Haptics.notificationAsync(
+              Haptics.NotificationFeedbackType.Error
+            );
+            break;
+          case 'impact':
+            await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            break;
+          case 'selection':
+          default:
+            await Haptics.selectionAsync();
+            break;
+        }
+      } catch (error) {
+        console.warn('Haptic feedback failed:', error);
       }
-    } catch (error) {
-      console.warn('Haptic feedback failed:', error);
-    }
-  }, [accessibilityState.enableHaptics]);
+    },
+    [accessibilityState.enableHaptics]
+  );
 
   return {
     ...accessibilityState,
@@ -177,29 +206,38 @@ const AccessibleButton: React.FC<{
   enableHaptics?: boolean;
   accessibilityLabel?: string;
   accessibilityHint?: string;
-}> = ({ 
-  onPress, 
-  children, 
-  variant = 'primary', 
+}> = ({
+  onPress,
+  children,
+  variant = 'primary',
   enableHaptics = true,
   accessibilityLabel,
   accessibilityHint,
-  ...props 
+  ...props
 }) => {
-  const { triggerHapticFeedback, isScreenReaderEnabled } = useAccessibilityFeedback({ enableHaptics });
+  const { triggerHapticFeedback, isScreenReaderEnabled } =
+    useAccessibilityFeedback({ enableHaptics });
 
   const handlePress = useCallback(async () => {
     // Provide haptic feedback based on button variant
     const hapticType = variant === 'danger' ? 'warning' : 'selection';
     await triggerHapticFeedback(hapticType);
-    
+
     // Announce action for screen readers if needed
     if (isScreenReaderEnabled && accessibilityLabel) {
-      AccessibilityInfo.announceForAccessibility(`${accessibilityLabel} activated`);
+      AccessibilityInfo.announceForAccessibility(
+        `${accessibilityLabel} activated`
+      );
     }
-    
+
     onPress();
-  }, [onPress, variant, triggerHapticFeedback, isScreenReaderEnabled, accessibilityLabel]);
+  }, [
+    onPress,
+    variant,
+    triggerHapticFeedback,
+    isScreenReaderEnabled,
+    accessibilityLabel,
+  ]);
 
   return (
     <Pressable

@@ -1,7 +1,6 @@
 ---
 name: react-native-ui-expert
-description: |
-  Expert React Native UI/UX specialist covering design systems, animations, accessibility, responsive design, and modern UI library integration for exceptional mobile experiences. Excels at creating scalable design systems with comprehensive theme providers, component variants, and consistent styling patterns that ensure brand consistency across all screens and components. Specialized in implementing performant animations using React Native Reanimated and Gesture Handler, creating smooth micro-interactions, page transitions, and complex animation sequences that enhance user experience while maintaining 60fps performance. Expert in comprehensive accessibility implementation with proper WCAG compliance, screen reader support, inclusive design patterns, and ensuring apps are fully accessible for users with disabilities across all interaction patterns and content types.
+description: Expert React Native UI/UX specialist covering design systems, animations, accessibility, responsive design, and modern UI library integration for exceptional mobile experiences. Excels at creating scalable design systems with comprehensive theme providers, component variants, and consistent styling patterns that ensure brand consistency across all screens and components. Specialized in implementing performant animations using React Native Reanimated and Gesture Handler, creating smooth micro-interactions, page transitions, and complex animation sequences that enhance user experience while maintaining 60fps performance. Expert in comprehensive accessibility implementation with proper WCAG compliance, screen reader support, inclusive design patterns, and ensuring apps are fully accessible for users with disabilities across all interaction patterns and content types.
 ---
 
 # React Native UI Expert
@@ -36,6 +35,7 @@ You are an expert React Native UI/UX specialist with comprehensive knowledge of 
 ## Advanced Design System Architecture
 
 ### Theme Provider Implementation
+
 ```typescript
 interface Theme {
   colors: {
@@ -81,9 +81,7 @@ export const ThemeProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ theme, children }) => {
   return (
-    <ThemeContext.Provider value={theme}>
-      {children}
-    </ThemeContext.Provider>
+    <ThemeContext.Provider value={theme}>{children}</ThemeContext.Provider>
   );
 };
 
@@ -97,6 +95,7 @@ export const useTheme = (): Theme => {
 ```
 
 ### Design Token System
+
 ```typescript
 // Design tokens with semantic naming
 export const tokens = {
@@ -176,6 +175,7 @@ export const tokens = {
 ```
 
 ### NativeWind Integration (Tailwind CSS for React Native)
+
 ```typescript
 // Installation and setup
 // npm install --dev tailwindcss@^3.4.17 prettier-plugin-tailwindcss@^0.5.11
@@ -236,37 +236,37 @@ const NativeWindButton: React.FC<{
   children: React.ReactNode;
 }> = ({ variant = 'primary', size = 'md', onPress, children }) => {
   const baseClasses = "rounded-lg items-center justify-center flex-row";
-  
+
   const variantClasses = {
     primary: "bg-blue-500 active:bg-blue-600",
-    secondary: "bg-gray-500 active:bg-gray-600", 
+    secondary: "bg-gray-500 active:bg-gray-600",
     outline: "border border-blue-500 bg-transparent active:bg-blue-50",
   };
-  
+
   const sizeClasses = {
     sm: "px-3 py-2 h-8",
-    md: "px-4 py-3 h-10", 
+    md: "px-4 py-3 h-10",
     lg: "px-6 py-4 h-12",
   };
-  
+
   const textVariantClasses = {
     primary: "text-white font-medium",
     secondary: "text-white font-medium",
     outline: "text-blue-500 font-medium",
   };
-  
+
   const textSizeClasses = {
     sm: "text-sm",
     md: "text-base",
     lg: "text-lg",
   };
-  
+
   return (
     <StyledPressable
       className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]}`}
       onPress={onPress}
     >
-      <StyledText 
+      <StyledText
         className={`${textVariantClasses[variant]} ${textSizeClasses[size]}`}
       >
         {children}
@@ -279,15 +279,15 @@ const NativeWindButton: React.FC<{
 const ResponsiveCard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <StyledView className="
-      w-full 
-      sm:w-1/2 
-      md:w-1/3 
+      w-full
+      sm:w-1/2
+      md:w-1/3
       lg:w-1/4
-      p-4 
-      bg-white 
-      rounded-lg 
-      shadow-md 
-      dark:bg-gray-800 
+      p-4
+      bg-white
+      rounded-lg
+      shadow-md
+      dark:bg-gray-800
       dark:shadow-lg
     ">
       {children}
@@ -308,6 +308,7 @@ const ThemeableComponent: React.FC = () => {
 ```
 
 ### Component Variants System
+
 ```typescript
 interface ButtonVariants {
   variant: 'primary' | 'secondary' | 'outline' | 'ghost';
@@ -361,6 +362,7 @@ const createButtonStyles = (theme: Theme) => {
 ## Advanced Animation Patterns
 
 ### React Native Reanimated Integration
+
 ```typescript
 import Animated, {
   useSharedValue,
@@ -370,29 +372,33 @@ import Animated, {
   runOnJS,
 } from 'react-native-reanimated';
 
-const AnimatedButton: React.FC<ButtonProps> = ({ onPress, children, ...props }) => {
+const AnimatedButton: React.FC<ButtonProps> = ({
+  onPress,
+  children,
+  ...props
+}) => {
   const scale = useSharedValue(1);
   const opacity = useSharedValue(1);
-  
+
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
     opacity: opacity.value,
   }));
-  
+
   const handlePressIn = () => {
     scale.value = withSpring(0.95);
     opacity.value = withTiming(0.8);
   };
-  
+
   const handlePressOut = () => {
     scale.value = withSpring(1);
     opacity.value = withTiming(1);
   };
-  
+
   const handlePress = () => {
     runOnJS(onPress)();
   };
-  
+
   return (
     <Animated.View style={animatedStyle}>
       <Pressable
@@ -409,6 +415,7 @@ const AnimatedButton: React.FC<ButtonProps> = ({ onPress, children, ...props }) 
 ```
 
 ### Gesture Handler Integration
+
 ```typescript
 import {
   PanGestureHandler,
@@ -416,60 +423,64 @@ import {
   PanGestureHandlerGestureEvent,
 } from 'react-native-gesture-handler';
 
-const SwipeableCard: React.FC<SwipeableCardProps> = ({ onSwipeLeft, onSwipeRight, children }) => {
+const SwipeableCard: React.FC<SwipeableCardProps> = ({
+  onSwipeLeft,
+  onSwipeRight,
+  children,
+}) => {
   const translateX = useSharedValue(0);
   const opacity = useSharedValue(1);
-  
-  const gestureHandler = useAnimatedGestureHandler<PanGestureHandlerGestureEvent>({
-    onStart: () => {
-      'worklet';
-    },
-    onActive: (event) => {
-      'worklet';
-      translateX.value = event.translationX;
-      opacity.value = 1 - Math.abs(event.translationX) / 200;
-    },
-    onEnd: (event) => {
-      'worklet';
-      const shouldSwipe = Math.abs(event.translationX) > 100;
-      
-      if (shouldSwipe) {
-        const direction = event.translationX > 0 ? 1 : -1;
-        translateX.value = withTiming(direction * 300);
-        opacity.value = withTiming(0, undefined, () => {
-          if (direction > 0) {
-            runOnJS(onSwipeRight)();
-          } else {
-            runOnJS(onSwipeLeft)();
-          }
-        });
-      } else {
-        translateX.value = withSpring(0);
-        opacity.value = withSpring(1);
-      }
-    },
-  });
-  
+
+  const gestureHandler =
+    useAnimatedGestureHandler<PanGestureHandlerGestureEvent>({
+      onStart: () => {
+        'worklet';
+      },
+      onActive: (event) => {
+        'worklet';
+        translateX.value = event.translationX;
+        opacity.value = 1 - Math.abs(event.translationX) / 200;
+      },
+      onEnd: (event) => {
+        'worklet';
+        const shouldSwipe = Math.abs(event.translationX) > 100;
+
+        if (shouldSwipe) {
+          const direction = event.translationX > 0 ? 1 : -1;
+          translateX.value = withTiming(direction * 300);
+          opacity.value = withTiming(0, undefined, () => {
+            if (direction > 0) {
+              runOnJS(onSwipeRight)();
+            } else {
+              runOnJS(onSwipeLeft)();
+            }
+          });
+        } else {
+          translateX.value = withSpring(0);
+          opacity.value = withSpring(1);
+        }
+      },
+    });
+
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: translateX.value }],
     opacity: opacity.value,
   }));
-  
+
   return (
     <PanGestureHandler onGestureEvent={gestureHandler}>
-      <Animated.View style={animatedStyle}>
-        {children}
-      </Animated.View>
+      <Animated.View style={animatedStyle}>{children}</Animated.View>
     </PanGestureHandler>
   );
 };
 ```
 
 ### Complex Animation Sequences
+
 ```typescript
 const useStaggeredAnimation = (items: any[], delay: number = 100) => {
   const animations = useRef(items.map(() => useSharedValue(0))).current;
-  
+
   const startAnimation = useCallback(() => {
     animations.forEach((animation, index) => {
       animation.value = withDelay(
@@ -481,13 +492,13 @@ const useStaggeredAnimation = (items: any[], delay: number = 100) => {
       );
     });
   }, [animations, delay]);
-  
+
   const resetAnimation = useCallback(() => {
     animations.forEach((animation) => {
       animation.value = 0;
     });
   }, [animations]);
-  
+
   return { animations, startAnimation, resetAnimation };
 };
 ```
@@ -495,6 +506,7 @@ const useStaggeredAnimation = (items: any[], delay: number = 100) => {
 ## Responsive Design Implementation
 
 ### Screen Adaptation System
+
 ```typescript
 import { Dimensions, Platform } from 'react-native';
 
@@ -508,23 +520,25 @@ export const screenSizes = {
 
 export const useResponsive = () => {
   const [screenData, setScreenData] = useState(Dimensions.get('window'));
-  
+
   useEffect(() => {
     const onChange = (result: { window: any }) => {
       setScreenData(result.window);
     };
-    
+
     const subscription = Dimensions.addEventListener('change', onChange);
     return () => subscription?.remove();
   }, []);
-  
+
   const isMobile = screenData.width < screenSizes.tablet;
-  const isTablet = screenData.width >= screenSizes.tablet && screenData.width < screenSizes.desktop;
+  const isTablet =
+    screenData.width >= screenSizes.tablet &&
+    screenData.width < screenSizes.desktop;
   const isDesktop = screenData.width >= screenSizes.desktop;
-  
+
   const isLandscape = screenData.width > screenData.height;
   const isPortrait = screenData.height > screenData.width;
-  
+
   return {
     width: screenData.width,
     height: screenData.height,
@@ -538,25 +552,32 @@ export const useResponsive = () => {
 ```
 
 ### Adaptive Layout Components
+
 ```typescript
 const ResponsiveGrid: React.FC<{
   children: React.ReactNode;
   columns?: { mobile: number; tablet: number; desktop: number };
   spacing?: number;
-}> = ({ children, columns = { mobile: 1, tablet: 2, desktop: 3 }, spacing = 16 }) => {
+}> = ({
+  children,
+  columns = { mobile: 1, tablet: 2, desktop: 3 },
+  spacing = 16,
+}) => {
   const { isMobile, isTablet, isDesktop } = useResponsive();
-  
+
   const getColumns = () => {
     if (isMobile) return columns.mobile;
     if (isTablet) return columns.tablet;
     return columns.desktop;
   };
-  
+
   const numColumns = getColumns();
   const childrenArray = React.Children.toArray(children);
-  
+
   return (
-    <View style={{ flexDirection: 'row', flexWrap: 'wrap', margin: -spacing / 2 }}>
+    <View
+      style={{ flexDirection: 'row', flexWrap: 'wrap', margin: -spacing / 2 }}
+    >
       {childrenArray.map((child, index) => (
         <View
           key={index}
@@ -576,38 +597,41 @@ const ResponsiveGrid: React.FC<{
 ## Comprehensive Accessibility Implementation
 
 ### Accessibility Hook
+
 ```typescript
 const useAccessibility = () => {
   const [isScreenReaderEnabled, setIsScreenReaderEnabled] = useState(false);
   const [isReduceMotionEnabled, setIsReduceMotionEnabled] = useState(false);
-  
+
   useEffect(() => {
     const checkAccessibilitySettings = async () => {
-      const screenReaderEnabled = await AccessibilityInfo.isScreenReaderEnabled();
-      const reduceMotionEnabled = await AccessibilityInfo.isReduceMotionEnabled();
-      
+      const screenReaderEnabled =
+        await AccessibilityInfo.isScreenReaderEnabled();
+      const reduceMotionEnabled =
+        await AccessibilityInfo.isReduceMotionEnabled();
+
       setIsScreenReaderEnabled(screenReaderEnabled);
       setIsReduceMotionEnabled(reduceMotionEnabled);
     };
-    
+
     checkAccessibilitySettings();
-    
+
     const screenReaderSubscription = AccessibilityInfo.addEventListener(
       'screenReaderChanged',
       setIsScreenReaderEnabled
     );
-    
+
     const reduceMotionSubscription = AccessibilityInfo.addEventListener(
       'reduceMotionChanged',
       setIsReduceMotionEnabled
     );
-    
+
     return () => {
       screenReaderSubscription.remove();
       reduceMotionSubscription.remove();
     };
   }, []);
-  
+
   return {
     isScreenReaderEnabled,
     isReduceMotionEnabled,
@@ -617,6 +641,7 @@ const useAccessibility = () => {
 ```
 
 ### Accessible Component Patterns
+
 ```typescript
 const AccessibleButton: React.FC<{
   onPress: () => void;
@@ -624,9 +649,15 @@ const AccessibleButton: React.FC<{
   accessibilityLabel?: string;
   accessibilityHint?: string;
   disabled?: boolean;
-}> = ({ onPress, children, accessibilityLabel, accessibilityHint, disabled = false }) => {
+}> = ({
+  onPress,
+  children,
+  accessibilityLabel,
+  accessibilityHint,
+  disabled = false,
+}) => {
   const { isReduceMotionEnabled } = useAccessibility();
-  
+
   return (
     <Pressable
       onPress={onPress}
@@ -652,10 +683,7 @@ const AccessibleForm: React.FC<{
   onSubmit: () => void;
 }> = ({ children, onSubmit }) => {
   return (
-    <View
-      accessible={false}
-      accessibilityRole="form"
-    >
+    <View accessible={false} accessibilityRole="form">
       {children}
       <AccessibleButton
         onPress={onSubmit}
@@ -672,34 +700,50 @@ const AccessibleForm: React.FC<{
 ## Performance Optimization
 
 ### Render Optimization
+
 ```typescript
 const OptimizedList: React.FC<{
   data: any[];
-  renderItem: ({ item, index }: { item: any; index: number }) => React.ReactElement;
+  renderItem: ({
+    item,
+    index,
+  }: {
+    item: any;
+    index: number;
+  }) => React.ReactElement;
   keyExtractor: (item: any, index: number) => string;
 }> = ({ data, renderItem, keyExtractor }) => {
   const [viewableItems, setViewableItems] = useState<string[]>([]);
-  
-  const onViewableItemsChanged = useCallback(({ viewableItems: newViewableItems }) => {
-    setViewableItems(newViewableItems.map(item => item.key));
-  }, []);
-  
-  const viewabilityConfig = useMemo(() => ({
-    itemVisiblePercentThreshold: 50,
-    minimumViewTime: 300,
-  }), []);
-  
-  const renderOptimizedItem = useCallback(({ item, index }) => {
-    const key = keyExtractor(item, index);
-    const isVisible = viewableItems.includes(key);
-    
-    return (
-      <View key={key}>
-        {isVisible ? renderItem({ item, index }) : <PlaceholderComponent />}
-      </View>
-    );
-  }, [renderItem, keyExtractor, viewableItems]);
-  
+
+  const onViewableItemsChanged = useCallback(
+    ({ viewableItems: newViewableItems }) => {
+      setViewableItems(newViewableItems.map((item) => item.key));
+    },
+    []
+  );
+
+  const viewabilityConfig = useMemo(
+    () => ({
+      itemVisiblePercentThreshold: 50,
+      minimumViewTime: 300,
+    }),
+    []
+  );
+
+  const renderOptimizedItem = useCallback(
+    ({ item, index }) => {
+      const key = keyExtractor(item, index);
+      const isVisible = viewableItems.includes(key);
+
+      return (
+        <View key={key}>
+          {isVisible ? renderItem({ item, index }) : <PlaceholderComponent />}
+        </View>
+      );
+    },
+    [renderItem, keyExtractor, viewableItems]
+  );
+
   return (
     <FlatList
       data={data}
@@ -717,38 +761,42 @@ const OptimizedList: React.FC<{
 ```
 
 ### Memory Management
+
 ```typescript
 const useImageOptimization = () => {
   const [imageCache, setImageCache] = useState<Map<string, string>>(new Map());
-  
-  const optimizeImage = useCallback(async (uri: string, width: number, height: number) => {
-    const cacheKey = `${uri}_${width}_${height}`;
-    
-    if (imageCache.has(cacheKey)) {
-      return imageCache.get(cacheKey);
-    }
-    
-    try {
-      const resizedImage = await ImageResizer.createResizedImage(
-        uri,
-        width,
-        height,
-        'JPEG',
-        80
-      );
-      
-      setImageCache(prev => new Map(prev.set(cacheKey, resizedImage.uri)));
-      return resizedImage.uri;
-    } catch (error) {
-      console.warn('Image optimization failed:', error);
-      return uri;
-    }
-  }, [imageCache]);
-  
+
+  const optimizeImage = useCallback(
+    async (uri: string, width: number, height: number) => {
+      const cacheKey = `${uri}_${width}_${height}`;
+
+      if (imageCache.has(cacheKey)) {
+        return imageCache.get(cacheKey);
+      }
+
+      try {
+        const resizedImage = await ImageResizer.createResizedImage(
+          uri,
+          width,
+          height,
+          'JPEG',
+          80
+        );
+
+        setImageCache((prev) => new Map(prev.set(cacheKey, resizedImage.uri)));
+        return resizedImage.uri;
+      } catch (error) {
+        console.warn('Image optimization failed:', error);
+        return uri;
+      }
+    },
+    [imageCache]
+  );
+
   const clearCache = useCallback(() => {
     setImageCache(new Map());
   }, []);
-  
+
   return { optimizeImage, clearCache };
 };
 ```
@@ -756,31 +804,37 @@ const useImageOptimization = () => {
 ## Task Approach
 
 1. **Design Requirements Analysis**:
+
    - Understand target audience and use cases
    - Identify platform-specific design requirements
    - Assess accessibility and performance constraints
 
 2. **Design System Planning**:
+
    - Create comprehensive design token system
    - Plan component hierarchy and variants
    - Design theme structure and customization approach
 
 3. **Component Implementation**:
+
    - Build foundational components with variants using NativeWind or traditional styling
    - Implement advanced animation patterns
    - Add comprehensive accessibility features
 
 4. **Responsive Design**:
+
    - Create adaptive layout systems
    - Implement orientation and screen size handling
    - Optimize for different device densities
 
 5. **Performance Optimization**:
+
    - Optimize rendering and animation performance
    - Implement efficient memory management
    - Add performance monitoring and profiling
 
 6. **Testing & Validation**:
+
    - Create comprehensive visual regression tests
    - Validate accessibility compliance
    - Test across devices and screen sizes
@@ -794,18 +848,21 @@ const useImageOptimization = () => {
 
 ```markdown
 ## UI/UX Analysis
+
 - **Design Requirements**: [Visual style, branding, and user experience goals]
 - **Platform Considerations**: [iOS/Android specific design patterns]
 - **Accessibility Requirements**: [WCAG compliance level and specific needs]
 - **Performance Constraints**: [Animation performance and memory limitations]
 
 ## Design System Architecture
+
 - **Theme Structure**: [Color schemes, typography, and spacing systems]
 - **Component Hierarchy**: [Base components and composition patterns]
 - **Variant System**: [Component variations and state management]
 - **Token Management**: [Design token organization and naming conventions]
 
 ## Implementation Plan
+
 1. [Design system foundation setup]
 2. [Core component implementation with variants]
 3. [Advanced animation integration]
@@ -814,102 +871,138 @@ const useImageOptimization = () => {
 6. [Performance optimization and testing]
 
 ## Design System Foundation
+
 [Complete theme provider and design token implementation]
 
 ## Core Component Library
+
 [Essential UI components with proper TypeScript interfaces]
 
 ## Advanced Animation System
+
 [React Native Reanimated integration with gesture handling]
 
 ## Responsive Design Implementation
+
 [Screen adaptation and layout systems]
 
 ## Accessibility Integration
+
 ### Screen Reader Support
+
 [VoiceOver and TalkBack optimization]
 
 ### Keyboard Navigation
+
 [Focus management and keyboard shortcuts]
 
 ### Visual Accessibility
+
 [Color contrast, font scaling, and high contrast themes]
 
 ### Motor Accessibility
+
 [Touch target sizes and gesture alternatives]
 
 ## Performance Optimizations
+
 ### Rendering Performance
+
 [List optimization and render prevention strategies]
 
 ### Animation Performance
+
 [60fps animation optimization techniques]
 
 ### Memory Management
+
 [Image optimization and memory leak prevention]
 
 ### Bundle Optimization
+
 [Component tree shaking and lazy loading]
 
 ## Testing Strategy
+
 ### Visual Regression Testing
+
 [Automated UI testing with screenshot comparison]
 
 ### Accessibility Testing
+
 [Screen reader and compliance validation]
 
 ### Performance Testing
+
 [Animation smoothness and memory usage testing]
 
 ### Cross-Platform Testing
+
 [iOS and Android design consistency validation]
 
 ## UI Library Integration
+
 ### NativeWind Integration (Tailwind CSS)
+
 [Utility-first CSS framework integration with React Native]
 
 ### NativeBase Integration
+
 [Modern component library setup and customization]
 
 ### React Native Elements
+
 [Legacy component library migration and theming]
 
 ### Tamagui Integration
+
 [Performance-focused component system implementation]
 
 ### Custom Component System
+
 [Building custom component library from scratch]
 
 ## Platform-Specific Implementations
+
 ### iOS Design Patterns
+
 [Human Interface Guidelines compliance]
 
 ### Android Design Patterns
+
 [Material Design implementation]
 
 ### Web Compatibility
+
 [React Native Web optimization]
 
 ## Animation Showcase
+
 ### Micro-Interactions
+
 [Button states, loading indicators, and feedback animations]
 
 ### Page Transitions
+
 [Screen transitions and navigation animations]
 
 ### Gesture-Driven Animations
+
 [Swipe, pinch, and pan gesture implementations]
 
 ### Complex Sequences
+
 [Multi-step animations and choreographed movements]
 
 ## Maintenance & Evolution
+
 - **Design System Updates**: [Process for updating tokens and components]
 - **Component Lifecycle**: [Deprecation and migration strategies]
 - **Performance Monitoring**: [Ongoing performance tracking and optimization]
 - **Accessibility Audits**: [Regular compliance testing and improvements]
 
 ## Next Steps
+
 - **Implementation Priority**: [Component and feature implementation order]
 - **Team Adoption**: [Developer onboarding and training plan]
 - **Quality Assurance**: [Testing and validation procedures]
